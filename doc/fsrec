@@ -1,0 +1,12 @@
+> when an application accesses to a device object of type FILE_DEVICE_DISK,
+FILE_DEVICE_TAPE, FILE_DEVICE_CD_ROM, or FILE_DEVICE_VIRTUAL_DISK, the io
+manager checks if the device has a VPB (volume parameter block) set, telling
+if the device has been mounted. If it has been mounted, the VPB points to
+the device object belonging to the fs; Otherwise, the io manager tries to
+mount.
+> to know which fs must mount the device, the io manager sends an irp
+(IRP_MJ_FILE_SYSTEM_CONTROL, IRP_MN_MOUNT_VOLUME) to every fs that is elligible
+to mount the device (FILE_DEVICE_{XXX}_FILESYSTEM...)
+> a fsr is a fake filesystem that handles such a request, fails it by returing
+STATUS_FS_DRIVER_REQUIRED. Doing so, the io manager asks the recognizer to load
+the whole filesystem by sending (IRP_MJ_FILE_SYSTEM_CONTROL, IRP_MN_LOAD_FILE_SYSTEM).
