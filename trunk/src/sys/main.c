@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Sat Jun 14 23:28:24 2008 texane
-** Last update Sun Jun 15 02:47:03 2008 texane
+** Last update Sun Jun 15 11:48:39 2008 texane
 */
 
 
@@ -21,25 +21,21 @@
 #include "unit.h"
 
 
-static void main(int ac, char** av)
-{
-  int i;
-
-  for (i = 0; av[i] != NULL; ++i)
-    DbgPrint("%s\n", av[i]);
-}
-
-
 static void unit_main(PUNICODE_STRING path)
 {
+  int i;
   int ac;
-  char** av;
+  WCHAR** av;
 
-  if (UnitGetAv(path, &ac, &av) != -1)
-    {
-      main(ac, av);
-      UnitFreeAv(av);
-    }
+  if (UnitGetAv(path, &ac, &av) == -1)
+    return ;
+
+  DbgPrint("ac == %d\n", ac);
+
+  for (i = 0; i < ac; ++i)
+    DbgPrint("[0x%08x] %ws\n", av[i], av[i]);
+
+  UnitFreeAv(av);
 }
 
 
@@ -64,6 +60,8 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING path)
 
   RtlZeroMemory(driver->MajorFunction, sizeof(driver->MajorFunction));
   driver->DriverUnload = DriverUnload;
+
+  DbgPrint("_UNIT == %d\n", _UNIT);
 
 #if _UNIT
   unit_main(path);
