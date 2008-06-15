@@ -6,5 +6,9 @@ TARGETPATH=.
 MSC_WARNING_LEVEL=/W3
 
 
+CDEFS = $(CDEFS) /D_UNIT=1
+
+
 SOURCES = \
-main.c
+main.c \
+unit.c
