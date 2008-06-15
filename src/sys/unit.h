@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Sun Jun 15 02:33:34 2008 texane
-** Last update Sun Jun 15 02:45:48 2008 texane
+** Last update Sun Jun 15 11:42:21 2008 texane
 */
 
 
@@ -16,8 +16,8 @@
 
 
 
-int UnitGetAv(PUNICODE_STRING, int*, char***);
-void UnitFreeAv(char**);
+int UnitGetAv(PUNICODE_STRING, int*, WCHAR***);
+void UnitFreeAv(WCHAR**);
 
 
 

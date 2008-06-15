@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Sat Jun 14 23:43:20 2008 texane
-** Last update Sun Jun 15 02:30:47 2008 texane
+** Last update Sun Jun 15 11:30:50 2008 texane
 */
 
 
@@ -177,7 +177,7 @@ int main(int ac, _TCHAR** av)
   DWORD res;
   _TCHAR KeyName[1024];
 
-  if (ac < 3)
+  if (ac == 1)
     {
       printf("%s: <driver> <avs>\n", av[0]);
       return -1;
