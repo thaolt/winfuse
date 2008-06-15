@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Sat Jun 14 23:28:24 2008 texane
-** Last update Sun Jun 15 11:48:39 2008 texane
+** Last update Sun Jun 15 11:55:26 2008 texane
 */
 
 
@@ -60,8 +60,6 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING path)
 
   RtlZeroMemory(driver->MajorFunction, sizeof(driver->MajorFunction));
   driver->DriverUnload = DriverUnload;
-
-  DbgPrint("_UNIT == %d\n", _UNIT);
 
 #if _UNIT
   unit_main(path);
