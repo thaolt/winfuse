@@ -12,4 +12,9 @@ C_DEFINES = $(C_DEFINES) /DWINFUSE_POOL_TAG=0x46555345
 
 SOURCES = \
 main.c \
-unit.c
+disk.c \
+fs.c \
+create.c \
+close.c \
+cleanup.c \
+fscontrol.c
