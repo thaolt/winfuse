@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Sat Jun 14 23:28:24 2008 texane
-** Last update Mon Jun 16 21:11:34 2008 texane
+** Last update Mon Jun 16 23:32:07 2008 texane
 */
 
 
@@ -14,8 +14,9 @@
 
 
 
-/* driver
- */
+PDRIVER_OBJECT gWinfuseDriver = NULL;
+
+
 
 static void DriverUnload(IN PDRIVER_OBJECT Driver)
 {
@@ -36,6 +37,8 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT Driver, PUNICODE_STRING Path)
 
   RtlZeroMemory(Driver->MajorFunction, sizeof(Driver->MajorFunction));
   Driver->DriverUnload = DriverUnload;
+
+  gWinfuseDriver = Driver;
 
   Status = WinfuseCreateDisk(Driver);
   if (Status != STATUS_SUCCESS)

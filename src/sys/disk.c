@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Mon Jun 16 20:47:24 2008 texane
-** Last update Mon Jun 16 21:56:42 2008 texane
+** Last update Mon Jun 16 23:21:44 2008 texane
 */
 
 
@@ -58,4 +58,21 @@ void WinfuseDestroyDisk(void)
       IoDeleteDevice(gWinfuseDevice);
       gWinfuseDevice = NULL;
     }
+}
+
+
+
+PDEVICE_OBJECT WinfuseReferenceDisk(void)
+{
+  if (gWinfuseDevice != NULL)
+    ObReferenceObject(gWinfuseDevice);
+
+  return gWinfuseDevice;
+}
+
+
+
+void WinfuseDereferenceDisk(PDEVICE_OBJECT Device)
+{
+  ObDereferenceObject(Device);
 }

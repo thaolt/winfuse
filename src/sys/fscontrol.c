@@ -2,13 +2,21 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Mon Jun 16 21:21:18 2008 texane
-** Last update Mon Jun 16 22:39:27 2008 texane
+** Last update Mon Jun 16 23:33:35 2008 texane
 */
 
 
 
 #include <ntifs.h>
+#include "disk.h"
 #include "debug.h"
+
+
+
+/* globals
+ */
+
+extern PDRIVER_OBJECT gWinfuseDriver;
 
 
 
@@ -46,13 +54,53 @@ static NTSTATUS WinfuseFsRequest(PIO_STACK_LOCATION IrpSp)
 
 static NTSTATUS WinfuseMountVolume(PIO_STACK_LOCATION IrpSp)
 {
-  PDEVICE_OBJECT Device;
+  NTSTATUS Status;
+  PDEVICE_OBJECT WinfuseDiskDevice;
+  PDEVICE_OBJECT TargetDevice;
   PVPB Vpb;
+  PDEVICE_OBJECT Vdo;
 
-  Device = IrpSp->Parameters.MountVolume.DeviceObject;
+  DEBUG_ENTER();
+
+  WinfuseDiskDevice = WinfuseReferenceDisk();
+
+  if (WinfuseReferenceDisk == NULL)
+    return STATUS_UNSUCCESSFUL;
+
+  TargetDevice = IrpSp->Parameters.MountVolume.DeviceObject;
   Vpb = IrpSp->Parameters.MountVolume.Vpb;
 
-  return STATUS_UNSUCCESSFUL;
+  if (TargetDevice == WinfuseDiskDevice)
+    {
+      DEBUG_PRINTF("TargetDevice == WinfuseDiskDevice\n");
+
+      Status = IoCreateDevice(gWinfuseDriver,
+			      0,
+			      NULL,
+			      FILE_DEVICE_DISK_FILE_SYSTEM,
+			      0,
+			      FALSE,
+			      &Vdo);
+
+      if (Status != STATUS_SUCCESS)
+	{
+	  DEBUG_ERROR("IoCreateDevice() == 0x%08x\n", Status);
+	  return Status;
+	}
+
+      Vpb->DeviceObject = Vdo;
+
+      Status = STATUS_SUCCESS;
+    }
+  else
+    {
+      DEBUG_ERROR("invalid device to mount\n");
+      Status = STATUS_UNRECOGNIZED_VOLUME;
+    }
+
+  WinfuseDereferenceDisk(WinfuseDiskDevice);
+
+  return Status;
 }
 
 
