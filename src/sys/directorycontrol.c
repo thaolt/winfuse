@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Tue Jun 17 22:55:46 2008 rno
-** Last update Tue Jun 17 23:14:03 2008 texane
+** Last update Wed Jun 18 00:36:34 2008 texane
 */
 
 
@@ -31,14 +31,29 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
 
   DEBUG_PRINTF("UserBuffer: 0x%08x\n", Irp->UserBuffer);
 
+  __try
+    {
+      ProbeForWrite(Irp->UserBuffer,
+		    IrpSp->Parameters.QueryDirectory.Length,
+		    1);
+
+      RtlZeroMemory(Irp->UserBuffer,
+		    IrpSp->Parameters.QueryDirectory.Length);
+    }
+  __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+      return STATUS_UNSUCCESSFUL;
+    }
+
   switch (IrpSp->Parameters.QueryDirectory.FileInformationClass)
     {
+      /* http://msdn.microsoft.com/en-us/library/ms795825.aspx
+       */
+
     case FileBothDirectoryInformation:
       {
 	/* FILE_BOTH_DIR_INFORMATION
 	 */
-
-	IrpSp->Parameters.QueryDirectory.Length = 0;
 
 	Status = STATUS_SUCCESS;
 
@@ -50,8 +65,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
  	/* FILE_DIRECTORY_INFORMATION
 	 */
 
-	IrpSp->Parameters.QueryDirectory.Length = 0;
-
 	Status = STATUS_SUCCESS;
 
 	break;
@@ -61,8 +74,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
       {
 	/* FILE_FULL_DIR_INFORMATION
 	 */
-
-	IrpSp->Parameters.QueryDirectory.Length = 0;
 
 	Status = STATUS_SUCCESS;
 
@@ -74,8 +85,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
 	/* FILE_ID_BOTH_DIR_INFORMATION
 	 */
 	
-	IrpSp->Parameters.QueryDirectory.Length = 0;
-
 	Status = STATUS_SUCCESS;
 
 	break;
@@ -85,8 +94,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
       {
 	/* FILE_ID_FULL_DIR_INFORMATION
 	 */
-
-	IrpSp->Parameters.QueryDirectory.Length = 0;
 
 	Status = STATUS_SUCCESS;
 
@@ -98,8 +105,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
 	/* FILE_NAMES_INFORMATION
 	 */
 	  
-	IrpSp->Parameters.QueryDirectory.Length = 0;
-
 	Status = STATUS_SUCCESS;
 
 	break;
@@ -109,8 +114,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
       {
  	/* FILE_OBJECTID_INFORMATION
 	 */
-
-	IrpSp->Parameters.QueryDirectory.Length = 0;
 
 	Status = STATUS_SUCCESS;
 
@@ -122,8 +125,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
 	/* obsolete, IRP_MJ_QUERY_QUOTA
 	 */
 
-	IrpSp->Parameters.QueryDirectory.Length = 0;
-
 	Status = STATUS_UNSUCCESSFUL;
 
 	break;
@@ -134,8 +135,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
 	/* FILE_REPARSE_POINT_INFORMATION
 	 */
 
-	IrpSp->Parameters.QueryDirectory.Length = 0;
-
 	Status = STATUS_SUCCESS;
 
 	break;
@@ -145,8 +144,6 @@ static NTSTATUS WinfuseQueryDirectory(PIRP Irp,
       {
 	DEBUG_ERROR("FileInformationClass == 0x%x\n",
 		    IrpSp->Parameters.QueryDirectory.FileInformationClass);
-
-	IrpSp->Parameters.QueryDirectory.Length = 0;
 
 	Status = STATUS_UNSUCCESSFUL;
 
