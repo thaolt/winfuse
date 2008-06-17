@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Mon Jun 16 21:21:18 2008 texane
-** Last update Tue Jun 17 22:02:50 2008 rno
+** Last update Tue Jun 17 22:48:20 2008 texane
 */
 
 
@@ -23,6 +23,19 @@ extern PDRIVER_OBJECT gWinfuseDriver;
 static NTSTATUS WinfuseFsctlDismountVolume(PIO_STACK_LOCATION IrpSp)
 {
   DEBUG_ENTER();
+
+#if 0
+  KIRQL Irql;
+  PVPB Vpb;
+
+  Vpb = IrpSp->Parameters.MountVolume.Vpb;
+
+  IoAcquireVpbSpinLock(&Irql);
+
+  Vpb->Flags &= ~VPB_MOUNTED;
+
+  IoReleaseVpbSpinLock(Irql);
+#endif
 
   return STATUS_SUCCESS;
 }
