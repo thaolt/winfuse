@@ -17,4 +17,5 @@ fs.c \
 create.c \
 close.c \
 cleanup.c \
-fscontrol.c
+fscontrol.c \
+directorycontrol.c

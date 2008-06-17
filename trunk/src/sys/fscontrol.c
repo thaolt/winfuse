@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Mon Jun 16 21:21:18 2008 texane
-** Last update Mon Jun 16 23:33:35 2008 texane
+** Last update Tue Jun 17 22:02:50 2008 rno
 */
 
 
@@ -124,6 +124,10 @@ NTSTATUS WinfuseFsControl(PDEVICE_OBJECT Device,
       break;
 
     case IRP_MN_MOUNT_VOLUME:
+      DEBUG_PRINTF("Returning STATUS_FS_DRIVER_REQUIRED\n");
+      Status = STATUS_FS_DRIVER_REQUIRED;
+
+    case IRP_MN_LOAD_FILE_SYSTEM:
       Status = WinfuseMountVolume(IrpSp);
       break;
 

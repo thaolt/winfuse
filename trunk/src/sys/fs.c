@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Mon Jun 16 21:09:55 2008 texane
-** Last update Mon Jun 16 22:17:27 2008 texane
+** Last update Tue Jun 17 22:07:48 2008 rno
 */
 
 
@@ -21,6 +21,7 @@ extern NTSTATUS WinfuseCreate(PDEVICE_OBJECT, PIRP, PIO_STACK_LOCATION);
 extern NTSTATUS WinfuseClose(PDEVICE_OBJECT, PIRP, PIO_STACK_LOCATION);
 extern NTSTATUS WinfuseCleanup(PDEVICE_OBJECT, PIRP, PIO_STACK_LOCATION);
 extern NTSTATUS WinfuseFsControl(PDEVICE_OBJECT, PIRP, PIO_STACK_LOCATION);
+extern NTSTATUS WinfuseDirectoryControl(PDEVICE_OBJECT, PIRP, PIO_STACK_LOCATION);
 
 
 
@@ -49,6 +50,10 @@ static NTSTATUS DispatchIrp(PDEVICE_OBJECT Device, PIRP Irp)
 
     case IRP_MJ_FILE_SYSTEM_CONTROL:
       Status = WinfuseFsControl(Device, Irp, IrpSp);
+      break;
+
+    case IRP_MJ_DIRECTORY_CONTROL:
+      Status = WinfuseDirectoryControl(Device, Irp, IrpSp);
       break;
 
     default:
