@@ -2,7 +2,7 @@
 ** Made by texane <texane@gmail.com>
 ** 
 ** Started on  Mon Jun 16 21:21:18 2008 texane
-** Last update Tue Jun 17 22:48:20 2008 texane
+** Last update Wed Jun 18 00:11:45 2008 texane
 */
 
 
@@ -100,6 +100,8 @@ static NTSTATUS WinfuseMountVolume(PIO_STACK_LOCATION IrpSp)
 	  DEBUG_ERROR("IoCreateDevice() == 0x%08x\n", Status);
 	  return Status;
 	}
+
+      Vdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
       Vpb->DeviceObject = Vdo;
 
