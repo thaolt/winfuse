@@ -1,3 +1,10 @@
+> bugs, read the dokan readme.txt
+
+> according to dokan documentation, IsDirectory should
+be set to TRUE by the fs programmer if one of the operations
+CreateFile or {Create,Open}Directory acts on a directory
+and IsDirectory is false. should check it back.
+ 
 > fsync: isdatasync is always set to 0
 > readdir: use getdir if no readdir function defined
 > locking
