@@ -1,0 +1,5 @@
+> fsync: isdatasync is always set to 0
+> readdir: use getdir if no readdir function defined
+> locking
+> implement create
+> use 64 bits off_t
